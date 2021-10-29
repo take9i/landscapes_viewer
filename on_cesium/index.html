@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<script src="https://cesium.com/downloads/cesiumjs/releases/1.84/Build/Cesium/Cesium.js"></script>
+<link href="https://cesium.com/downloads/cesiumjs/releases/1.84/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+<style type="text/css">
+
+body {
+  margin: 0; padding: 0; overflow: hidden;
+}
+#cesiumContainer {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  margin: 0; padding: 0; overflow: hidden;
+}
+
+</style>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <script>
+    const TILESET_TERRAINS_URL = 'http://localhost:8887/gsi_enoshima_5m_unleveled/terrain/tileset.json'
+    const TILESET_BLDGS_URL = 'http://localhost:8887/gsi_enoshima_5m_unleveled/bldgs/tileset.json'
+    const TILESET_ROADS_URL = 'http://localhost:8887/gsi_enoshima_5m_unleveled/roads/tileset.json'
+
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4OWVjZjVkYi05OTk3LTRmNmUtYWJhNi1jMWJhZmIwNzQ0YWYiLCJpZCI6MTM1NCwiaWF0IjoxNTI4MTA0MzE2fQ.sY_ZofA4TD7x4BfJAvn2Su7S_PSEzJ4zspx5UB1H3E4';
+
+    const viewer = new Cesium.Viewer('cesiumContainer', {
+      // terrainProvider: Cesium.createWorldTerrain()
+      // terrainProvider: new Cesium.CesiumTerrainProvider({
+      //   url: Cesium.IonResource.fromAssetId(541356),
+      // }),
+    });
+    var layer = viewer.imageryLayers.addImageryProvider(
+      new Cesium.IonImageryProvider({ assetId: 4 })
+    );
+
+    viewer.scene.primitives.add(
+      new Cesium.Cesium3DTileset({
+        url: TILESET_BLDGS_URL
+      })
+    );
+    viewer.scene.primitives.add(
+      new Cesium.Cesium3DTileset({
+        url: TILESET_TERRAINS_URL
+      })
+    );
+    viewer.scene.primitives.add(
+      new Cesium.Cesium3DTileset({
+        url: TILESET_ROADS_URL
+      })
+    );
+    
+    viewer.camera.flyTo({
+      destination : Cesium.Cartesian3.fromDegrees(139.482421875, 35.31736632923787, 400),
+      orientation : {
+        heading : Cesium.Math.toRadians(0.0),
+        pitch : Cesium.Math.toRadians(-15.0),
+      }
+    });
+  </script>
+</body>
+</html>
